@@ -37,7 +37,13 @@ var yGraph;
 var wGraph;
 var hGraph;
 
+var xTooltip;
+var yTooltip;
+var wTooltip;
+var hTooltip;
+
 var scaleX = 1.0;
+var scaleY = 1.0;
 
 var prints = 1000;
 
@@ -61,6 +67,11 @@ function setup()
   hBars = height*0.44;
   xmBars = xBars + wBars;
   ymBars = yBars + hBars;
+
+  xTooltip = width*0.03;
+  yTooltip = height*0.9;
+  wTooltip = width*0.34;
+  hTooltip = height*0.07;
 
   /* tone.js, capturar audio */
   mic = new Tone.UserMedia();
@@ -108,6 +119,7 @@ function setup()
 
     fft.forward(sig);
   };
+  Tone.context.resume();
   Tone.connect(node, Tone.context.destination, [inputNum=0], [outputNum=0]);
   Tone.connect(mic, node, [inputNum=0], [outputNum=0]);
 
@@ -115,31 +127,102 @@ function setup()
   angleMode(DEGREES);
   timeCheckpoint = millis();
 
-  buttonFirstNames = ['Default', 'Bajos', 'Medios', 'Altos', 'Octava 5', 'Octava 6', 'Guitarra'];
-  buttonFirstFuncs = [ freqsDefault, freqsBass, freqsMid, freqsTrebble, freqsOctave5, freqsOctave6, freqsGuitar ];
+  buttonFirstNames = ['Default', 'INICIO MANUAL (CHROME)'];
+  buttonFirstFuncs = [ freqsDefault, manualStart ];
+  buttonFirstTooltip = [  
+                          'Graficar frecuencias predefinidas. Varias frecuencias fáciles de distinguir entre sí.',
+                          'Si se está usando el navegador Chrome, presionar este botón para iniciar a graficar.'
+                       ];
+
+  buttonSecondNames = ['Bajos', 'Medios', 'Altos', 'Octava 5', 'Octava 6'];
+  buttonSecondFuncs = [ freqsBass, freqsMid, freqsTrebble, freqsOctave5, freqsOctave6 ];
+  buttonSecondTooltip = [
+                          'Frecuencias bajas, graves al oído.',
+                          'Frecuencias medias.',
+                          'Frecuencias altas, agudas al oído.',
+                          'Algunas notas seleccionadas de la quinta octava usada en música.',
+                          'Algunas notas seleccionadas de la sexta octava usada en música.'
+                        ];
+
+  buttonThirdNames = ['Tiempo: zoom in', 'Tiempo: zoom out', 'Amplitud: zoom in', 'Amplitud: zoom out'];
+  buttonThirdFuncs = [ timeZoomIn, timeZoomOut, ampZoomIn, ampZoomOut ];
+  buttonThirdTooltip = [
+                          'Acercamiento en el eje horizontal. Se visualizarán menos periodos de la señal en la gráfica.',
+                          'Alejamiento en el eje horizontal. Se visualizarán más periodos de la señal en la gráfica.',
+                          'Acercamiento en el eje vertical. Se podrá visualizar mejor una señal con baja amplitud, es decir, bajo volumen.',
+                          'Alejamiento en el eje vertical. Se podrá visualizar mejor una señal con mayor amplitud, des decir, alto volumen.'
+                       ];
 
   for (i = 0; i < buttonFirstNames.length; i++) {
     button = createButton(buttonFirstNames[i]);
     button.position(width*0.03, height*(0.58+i*0.06));
     button.mousePressed(buttonFirstFuncs[i]);
+    button.value(i);
     button.style('display', 'inline-block');
-    button.style('width', '100px');
+    button.style('width', width*0.08 +'px');
     button.style('height', '40px');
+    button.mouseOver(function() {
+      strokeWeight(1);
+      fill(240);
+      rect(xTooltip, yTooltip, wTooltip, hTooltip);
+
+      strokeWeight(0);
+      fill(0);
+      textSize(18);
+      text(buttonFirstTooltip[this.elt.value], xTooltip+5, yTooltip+15, wTooltip, hTooltip);
+    });
   }
-
-  buttonSecondNames = ['Tiempo: zoom in', 'Tiempo: zoom out'];
-  buttonSecondFuncs = [ timeZoomIn, timeZoomOut];
-
+  
   for (i = 0; i < buttonSecondNames.length; i++) {
     button = createButton(buttonSecondNames[i]);
     button.position(width*0.13, height*(0.58+i*0.06));
     button.mousePressed(buttonSecondFuncs[i]);
+    button.value(i);
     button.style('display', 'inline-block');
-    button.style('width', '100px');
+    button.style('width', width*0.08 + 'px');
     button.style('height', '40px');
+    button.mouseOver(function() {
+      strokeWeight(1);
+      fill(240);
+      rect(xTooltip, yTooltip, wTooltip, hTooltip);
+
+      strokeWeight(0);
+      fill(0);
+      textSize(18);
+      text(buttonSecondTooltip[this.elt.value], xTooltip+5, yTooltip+15, wTooltip, hTooltip);
+    });
+  }
+
+  for (i = 0; i < buttonThirdNames.length; i++) {
+    button = createButton(buttonThirdNames[i]);
+    button.position(width*0.23, height*(0.58+i*0.06));
+    button.mousePressed(buttonThirdFuncs[i]);
+    button.value(i);
+    button.style('display', 'inline-block');
+    button.style('width', width*0.08 + 'px');
+    button.style('height', '40px');
+    button.mouseOver(function() {
+      strokeWeight(1);
+      fill(240);
+      rect(xTooltip, yTooltip, wTooltip, hTooltip);
+
+      strokeWeight(0);
+      fill(0);
+      textSize(18);
+      console.log(buttonThirdTooltip[i]);
+      text(buttonThirdTooltip[this.elt.value], xTooltip+5, yTooltip+15, wTooltip, hTooltip);
+    });
   }
 
   reTag();
+
+  fill(240);
+  rect(xTooltip, yTooltip, wTooltip, hTooltip);
+
+  strokeWeight(0);
+  fill(0);
+  textSize(18);
+  text('Coloca el mouse sobre algún elemento para obtener más información.', xTooltip+5, yTooltip+15, wTooltip, hTooltip);
 }
 
 function reTag() {
@@ -157,6 +240,18 @@ function reTag() {
   }
 
   image(tag, width*0.03, height*0.51);
+}
+
+function manualStart () {
+  Tone.context.resume();
+}
+
+function ampZoomIn () {
+  scaleY = constrain(scaleY+0.05, 0.5, 1.5);
+}
+
+function ampZoomOut () {
+  scaleY = constrain(scaleY-0.05, 0.5, 1.5);
 }
 
 function timeZoomIn () {
@@ -357,9 +452,12 @@ function drawGraphTop () {
 }
 
 function drawSine (canvas, freq, mag, phase, color, x, y, w, h, name) {
-  var ma = h/2;
-  var yma = y + ma;
-  var sf = freq/scaleX;
+  var ma = h/2;               // max amplitude
+  var sa = ma * scaleY;       // scaled max amplitude
+  var sm = sa * mag;          // scaled magnitude
+  var yma = y + ma;           // centro, y base + max amplitude
+  var sf = freq/scaleX;       // scaled frequency
+  var sf100 = sf/100;         // scaled frequency adaptado al tamano de grafica
 
   canvas.stroke('black');
   canvas.textFont('Arial');
@@ -372,6 +470,9 @@ function drawSine (canvas, freq, mag, phase, color, x, y, w, h, name) {
 
   canvas.strokeWeight(1);
   canvas.line(5, y+ma, w+5, y+ma);
+  canvas.line(5, y+ma + 40*scaleY, 15, y+ma + 40*scaleY);
+  canvas.line(5, y+ma - 40*scaleY, 15, y+ma - 40*scaleY);
+
 
   for (var i = 0; (i*scaleX*180) < w; i++) {
     canvas.strokeWeight(0);
@@ -383,11 +484,11 @@ function drawSine (canvas, freq, mag, phase, color, x, y, w, h, name) {
 
   canvas.stroke(color);
   canvas.noFill();
-  canvas.strokeWeight(2);
+  canvas.strokeWeight(1);
 
   canvas.beginShape();
   for (var i = 0; i < w; i++) {  
-    var yp = ma * mag * sin(i * sf / 100 + phase);
+    var yp = sm * sin(i * sf100 + phase);
     canvas.vertex(x + i, yma - constrain(yp, -ma, ma));
   }
   canvas.endShape();
