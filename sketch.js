@@ -48,7 +48,7 @@ var drawSumasTop = false;
 /* Elementos DOM */
 var buttonRefs = [[], [], [], []];
 
-var tooltipTB, linkTB, zoomBP, zoomTB1, zoomTB2, redBP, blueBP;
+var tooltipTB, linkTB, zoomBP, zoomTB1, zoomTB2, redBP, blueBP, titleTB0, titleTB1, titleTB2;
 
 var backColor = 200;
 var panelColor = '#bbb';
@@ -132,8 +132,9 @@ function UI() {
   tooltipTB.style("background-color", "#444");
   tooltipTB.style("overflow-y", "auto")
   tooltipTB.style("color", "white");
+  tooltipTB.style("padding", "4px");
   tooltipTB.position(xTooltip, yTooltip);
-  tooltipTB.size(wTooltip, hTooltip*0.8);
+  tooltipTB.size(wTooltip-8, hTooltip*0.8);
 
   linkTB.style("font-family", "Courier");
   linkTB.style("font-size", "20px");
@@ -171,6 +172,27 @@ function UI() {
   zoomTB2.position(width*0.79, height*0.93);
   zoomTB2.size(width*0.09, hButton);
   zoomTB2.html("Amplitud");
+
+  titleTB0.style("font-family", "Courier");
+  titleTB0.style("font-size", "20px");
+  titleTB0.style("text-align", "center");
+  titleTB0.position(width*0.03, height*0.05);
+  titleTB0.size(width*0.35, height*0.03);
+  titleTB0.html("Todas las frecuencias");
+
+  titleTB1.style("font-family", "Courier");
+  titleTB1.style("font-size", "20px");
+  titleTB1.style("text-align", "center");
+  titleTB1.position(width*0.4, height*0.05);
+  titleTB1.size(width*0.27, height*0.03);
+  titleTB1.html("Frecuencias seleccionadas");
+
+  titleTB2.style("font-family", "Courier");
+  titleTB2.style("font-size", "20px");
+  titleTB2.style("text-align", "center");
+  titleTB2.position(width*0.7, height*0.05);
+  titleTB2.size(width*0.27, height*0.03);
+  titleTB2.html("Mayores amplitudes");
 }
 
 function setup() {
@@ -192,6 +214,9 @@ function setup() {
   zoomTB2 = createDiv('');
   redBP = createDiv('');
   blueBP = createDiv('');
+  titleTB0 = createDiv('');
+  titleTB1 = createDiv('');
+  titleTB2 = createDiv('');
   UI();
 
   /* tone.js, capturar audio */
@@ -784,7 +809,7 @@ function drawSine (canvas, freq, mag, phase, color, x, y, w, h, name) {
   dbText = [' ', '-18 dB', '-12 dB', ' -6 dB', '  0 dB', '  6dB', ' '];
 
   canvas.textSize(10);
-  for (var i = 1; (160*scaleY*i) < ma; i++) {
+  for (var i = 1; (160*scaleY*i) < (ma-1); i++) {
     canvas.strokeWeight(0);
     canvas.text(dbText[i], 17, yma - 160*scaleY*i + 4);
 
