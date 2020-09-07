@@ -78,13 +78,15 @@ function sizes() {
 
   hButton = height*0.04;
   hPanel = height*0.06;
+
+  textMid = height/47;
+  textBig = height/36;
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 
   sizes();
-  //background('white');
   clear();
   reTag();
 
@@ -149,17 +151,17 @@ function UI() {
   zoomBP.size(width*0.57, hPanel);
 
   tooltipTB.style("font-family", "Courier");
-  tooltipTB.style("font-size", "20px");
+  tooltipTB.style("font-size", textMid + "px");
   tooltipTB.style("white-space", "pre-wrap");
   tooltipTB.style("background-color", "#444");
   tooltipTB.style("overflow-y", "auto")
   tooltipTB.style("color", "white");
   tooltipTB.style("padding", "4px");
   tooltipTB.position(xTooltip, yTooltip);
-  tooltipTB.size(wTooltip-8, hTooltip*0.8);
+  tooltipTB.size(wTooltip-8, hTooltip*0.8-8);
 
   linkTB.style("font-family", "Courier");
-  linkTB.style("font-size", "20px");
+  linkTB.style("font-size", textMid + "px");
   linkTB.style("white-space", "pre-wrap");
   linkTB.style("background-color", "#666");
   linkTB.style("overflow-y", "auto")
@@ -183,35 +185,35 @@ function UI() {
 */
 
   //zoomTB1.style("font-family", "Courier");
-  zoomTB1.style("font-size", "20px");
+  zoomTB1.style("font-size", textMid + "px");
   zoomTB1.style("text-align", "center");
   zoomTB1.position(width*0.49, height*0.92);
   zoomTB1.size(width*0.09, hButton);
-  zoomTB1.html("Tiempo");
+  zoomTB1.html("Zoom tiempo");
 
   //zoomTB2.style("font-family", "Courier");
-  zoomTB2.style("font-size", "20px");
+  zoomTB2.style("font-size", textMid + "px");
   zoomTB2.style("text-align", "center");
   zoomTB2.position(width*0.79, height*0.92);
   zoomTB2.size(width*0.09, hButton);
-  zoomTB2.html("Amplitud");
+  zoomTB2.html("Zoom amplitud");
 
   //titleTB0.style("font-family", "Courier");
-  titleTB0.style("font-size", "26px");
+  titleTB0.style("font-size", textBig + "px");
   titleTB0.style("text-align", "center");
   titleTB0.position(width*0.03, height*0.05);
   titleTB0.size(width*0.35, height*0.03);
   titleTB0.html("Todas las frecuencias");
 
   //titleTB1.style("font-family", "Courier");
-  titleTB1.style("font-size", "26px");
+  titleTB1.style("font-size", textBig + "px");
   titleTB1.style("text-align", "center");
   titleTB1.position(width*0.4, height*0.05);
   titleTB1.size(width*0.27, height*0.03);
   titleTB1.html("Frecuencias seleccionadas");
 
   //titleTB2.style("font-family", "Courier");
-  titleTB2.style("font-size", "26px");
+  titleTB2.style("font-size", textBig + "px");
   titleTB2.style("text-align", "center");
   titleTB2.position(width*0.7, height*0.05);
   titleTB2.size(width*0.27, height*0.03);
@@ -300,7 +302,7 @@ function setup() {
                             'Treble'
                           ];
 
-  buttonThirdNames = ['Zoom in', 'Zoom out', 'Zoom in', 'Zoom out'];
+  buttonThirdNames = ['In', 'Out', 'In', 'Out'];
   buttonThirdFuncs = [ timeZoomIn, timeZoomOut, ampZoomIn, ampZoomOut ];
   buttonThirdTooltip = [
                           'Acercamiento en el eje horizontal. Se visualizarán menos repeticiones de la señal en la gráfica.\nSi la frecuencia es de 100Hz se verán diez ocurrencias en un periodo de 10ms. Si es de 1000Hz se verán cien ocurrencias.',
@@ -357,6 +359,8 @@ function setup() {
       if (l != '') {
         h = '<a href="'+l+'">Conoce más >> '+buttonFirstLinkTitle[this.elt.value]+'</a>';
         linkTB.html(h)
+      } else {
+        linkTB.html("");
       }
     });
 
@@ -378,6 +382,8 @@ function setup() {
       if (l != '') {
         h = '<a href="'+l+'">Conoce más >> '+buttonSecondLinkTitle[this.elt.value]+'</a>';
         linkTB.html(h)
+      } else {
+        linkTB.html("");
       }
     });
 
@@ -400,6 +406,8 @@ function setup() {
       if (l != '') {
         h = '<a href="'+l+'">Conoce más >> '+buttonThirdLinkTitle[this.elt.value]+'</a>';
         linkTB.html(h)
+      } else {
+        linkTB.html("");
       }
     });
 
@@ -422,6 +430,8 @@ function setup() {
       if (l != '') {
         h = '<a href="'+l+'">Conoce más >> '+buttonFourthLinkTitle[this.elt.value]+'</a>';
         linkTB.html(h)
+      } else {
+        linkTB.html("");
       }
     });
 
@@ -429,36 +439,21 @@ function setup() {
   }
 
   reTag();
-
-/*
-  fill(240);
-  rect(xTooltip, yTooltip, wTooltip, hTooltip);
-
-  strokeWeight(0);
-  fill(0);
-  textSize(18);
-  text('Un analizador de espectro permite visualizar las frecuencias que forman una señal, en este caso de audio. Utilizando la transformada de Fourier es posible descomponer la señal para obtener las frecuencias con mayor amplitud que la conforman.', xTooltip+margin, yTooltip+15, wTooltip, hTooltip);
-*/
-  /*
-  linkRef = createA('https://www.youtube.com/watch?v=spUNpyF58BY', 'Conoce más >> Fast Fourier transform', '_blank');
-  linkRef.position(width*0.05, height*0.93);
-  linkRef.style('font-size', '18px');
-  linkRef.style('font-family', 'Arial');
-  */
 }
 
 
 
 function reTag() {
   fill(0)
+  strokeWeight(1);
   rect(width*0.03, yBars, width*0.09, hBars);
-  textSize(15);
+  textSize(hBars/32-1);
   textAlign(RIGHT);
   stroke('white');
   strokeWeight(0);
   fill(255);
   for (i = 0; i < 4; i++) {
-    text(fixedNames[i], xBars-10, yBars+15+hBars/32*fixedFreqs[i]);
+    text(fixedNames[i], xBars-10, yBars+hBars/32*(fixedFreqs[i]+1));
   }
 }
 
@@ -821,6 +816,8 @@ function drawSine (canvas, freq, mag, phase, color, x, y, w, h, name) {
   var sf100 = sf/100;         // scaled frequency adaptado al tamano de grafica
   w = w-2;
 
+  var scalex180 = scaleX * 180;
+
   canvas.stroke(sinTextColor);
   canvas.textFont('Arial');
   canvas.fill(sinTextColor);
@@ -846,9 +843,10 @@ function drawSine (canvas, freq, mag, phase, color, x, y, w, h, name) {
 
   canvas.textSize(12);
   for (var i = 0; (i*scaleX*180) < w; i++) {
-    canvas.strokeWeight(0);
-    canvas.text(i*5 + ' ms', 180*i*scaleX+margin+2, yma+15);
-
+    if (i*scaleX*180 < w-25) {
+      canvas.strokeWeight(0);
+      canvas.text(i*5 + ' ms', 180*i*scaleX+margin+2, yma+15);
+    }
     canvas.strokeWeight(1);
     canvas.line(180*i*scaleX+margin, yma-8, 180*i*scaleX+margin, yma+8);
   }
