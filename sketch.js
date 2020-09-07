@@ -58,8 +58,8 @@ var sinTextColor;
 function sizes() {
   sinTextColor = color(50,200,50);
 
-  graphCommon = createGraphics(width*0.27, height*0.8+12);
-  graphTop = createGraphics(width*0.27, height*0.8+12);
+  graphCommon = createGraphics(width*0.27, height*0.79+12);
+  graphTop = createGraphics(width*0.27, height*0.79+12);
 
   xBars = width*0.1;
   yBars = height*0.08;
@@ -84,7 +84,8 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 
   sizes();
-  background(backColor);
+  //background('white');
+  clear();
   reTag();
 
   for (i = 0; i < buttonFirstNames.length; i++) {
@@ -96,7 +97,7 @@ function windowResized() {
 
   for (i = 0; i < buttonSecondNames.length; i++) {
     button = buttonRefs[1][i]
-    button.position(width*(0.11+i*0.065), height*0.7);
+    button.position(width*(0.12+i*0.065), height*0.7);
     button.style('width', width*0.055 + 'px');
     button.style('height', height*0.05 + 'px');
   }
@@ -104,7 +105,7 @@ function windowResized() {
   var pos3 = [width*0.43, width*0.58, width*0.73, width*0.88];
   for (i = 0; i < buttonRefs[2].length; i++) {
     button = buttonRefs[2][i];
-    button.position(pos3[i], height*0.92);
+    button.position(pos3[i], height*0.91);
     button.style('width', width*0.06 + 'px');
     button.style('height', hButton + 'px');
   }
@@ -126,6 +127,27 @@ function windowResized() {
 
 function UI() {
   /* DOM */
+  back.style("background-color", "#aaa");
+  back.position(width*0.015, height*0.015);
+  back.size(width*0.97, height*0.97);
+  back.style("z-index", "-1");
+
+  leg1.style("background-color", "#115");
+  leg1.position(width*0.1, height*0.985);
+  leg1.size(width*0.05, height*0.015);
+
+  leg2.style("background-color", "#115");
+  leg2.position(width*0.85, height*0.985);
+  leg2.size(width*0.05, height*0.015);
+
+  zoomBP.style("background-color", panelColor);
+  zoomBP.position(width*0.4, height*0.91);
+  zoomBP.size(width*0.57, hPanel);
+
+  zoomBP.style("background-color", panelColor);
+  zoomBP.position(width*0.4, height*0.91);
+  zoomBP.size(width*0.57, hPanel);
+
   tooltipTB.style("font-family", "Courier");
   tooltipTB.style("font-size", "20px");
   tooltipTB.style("white-space", "pre-wrap");
@@ -142,11 +164,12 @@ function UI() {
   linkTB.style("background-color", "#666");
   linkTB.style("overflow-y", "auto")
   linkTB.style("color", "#ccf")
+  linkTB.style("padding-left", "4px")
   linkTB.position(xTooltip, yTooltip+hTooltip*0.8);
-  linkTB.size(wTooltip, hTooltip*0.2);
+  linkTB.size(wTooltip-4, hTooltip*0.2);
 
   zoomBP.style("background-color", panelColor);
-  zoomBP.position(width*0.4, height*0.91);
+  zoomBP.position(width*0.4, height*0.90);
   zoomBP.size(width*0.57, hPanel);
 
 /*
@@ -159,36 +182,36 @@ function UI() {
   blueBP.size(width*0.25, hPanel);
 */
 
-  zoomTB1.style("font-family", "Courier");
+  //zoomTB1.style("font-family", "Courier");
   zoomTB1.style("font-size", "20px");
   zoomTB1.style("text-align", "center");
-  zoomTB1.position(width*0.49, height*0.93);
+  zoomTB1.position(width*0.49, height*0.92);
   zoomTB1.size(width*0.09, hButton);
   zoomTB1.html("Tiempo");
 
-  zoomTB2.style("font-family", "Courier");
+  //zoomTB2.style("font-family", "Courier");
   zoomTB2.style("font-size", "20px");
   zoomTB2.style("text-align", "center");
-  zoomTB2.position(width*0.79, height*0.93);
+  zoomTB2.position(width*0.79, height*0.92);
   zoomTB2.size(width*0.09, hButton);
   zoomTB2.html("Amplitud");
 
-  titleTB0.style("font-family", "Courier");
-  titleTB0.style("font-size", "20px");
+  //titleTB0.style("font-family", "Courier");
+  titleTB0.style("font-size", "26px");
   titleTB0.style("text-align", "center");
   titleTB0.position(width*0.03, height*0.05);
   titleTB0.size(width*0.35, height*0.03);
   titleTB0.html("Todas las frecuencias");
 
-  titleTB1.style("font-family", "Courier");
-  titleTB1.style("font-size", "20px");
+  //titleTB1.style("font-family", "Courier");
+  titleTB1.style("font-size", "26px");
   titleTB1.style("text-align", "center");
   titleTB1.position(width*0.4, height*0.05);
   titleTB1.size(width*0.27, height*0.03);
   titleTB1.html("Frecuencias seleccionadas");
 
-  titleTB2.style("font-family", "Courier");
-  titleTB2.style("font-size", "20px");
+  //titleTB2.style("font-family", "Courier");
+  titleTB2.style("font-size", "26px");
   titleTB2.style("text-align", "center");
   titleTB2.position(width*0.7, height*0.05);
   titleTB2.size(width*0.27, height*0.03);
@@ -200,13 +223,16 @@ function setup() {
   var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
   createCanvas(w, h);
-  background(backColor);
+  //background(backColor);
   fill(0);
   textSize(18);
 
   sizes();
 
   /* DOM */
+  back = createDiv('');
+  leg1 = createDiv('');
+  leg2 = createDiv('');
   tooltipTB = createDiv('');
   linkTB = createDiv('');
   zoomBP = createDiv('');
@@ -339,7 +365,7 @@ function setup() {
   
   for (i = 0; i < buttonSecondNames.length; i++) {
     button = createButton(buttonSecondNames[i]);
-    button.position(width*(0.11+i*0.065), height*0.7);
+    button.position(width*(0.12+i*0.065), height*0.7);
     button.mousePressed(buttonSecondFuncs[i]);
     button.value(i);
     button.style('display', 'inline-block');
@@ -361,7 +387,7 @@ function setup() {
   var pos3 = [width*0.43, width*0.58, width*0.73, width*0.88];
   for (i = 0; i < buttonThirdNames.length; i++) {
     button = createButton(buttonThirdNames[i]);
-    button.position(pos3[i], height*0.92);
+    button.position(pos3[i], height*0.91);
     button.mousePressed(buttonThirdFuncs[i]);
     button.value(i);
     button.style('display', 'inline-block');
