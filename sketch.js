@@ -79,8 +79,8 @@ function sizes() {
   hButton = height*0.04;
   hPanel = height*0.06;
 
-  textMid = height/47;
-  textBig = height/36;
+  textMid = height/48;
+  textBig = height/38;
 }
 
 function windowResized() {
@@ -129,50 +129,52 @@ function windowResized() {
 
 function UI() {
   /* DOM */
-  back.style("background-color", "#aaa");
-  back.position(width*0.015, height*0.015);
-  back.size(width*0.97, height*0.97);
+  back.style("background-color", "#999");
+  back.position(width*0.015, height*0.02);
+  back.size(width*0.97, height*0.96);
   back.style("z-index", "-1");
+  back.style("border-radius", "8px");
 
   leg1.style("background-color", "#115");
-  leg1.position(width*0.1, height*0.985);
-  leg1.size(width*0.05, height*0.015);
+  leg1.position(width*0.1, height*0.98);
+  leg1.size(width*0.05, height*0.02);
 
   leg2.style("background-color", "#115");
-  leg2.position(width*0.85, height*0.985);
-  leg2.size(width*0.05, height*0.015);
+  leg2.position(width*0.85, height*0.98);
+  leg2.size(width*0.05, height*0.02);
 
-  zoomBP.style("background-color", panelColor);
-  zoomBP.position(width*0.4, height*0.91);
+  zoomBP.style("background-color", "#aaa");
+  zoomBP.position(width*0.4, height*0.90);
   zoomBP.size(width*0.57, hPanel);
+  zoomBP.style("border-radius", "4px");
 
-  zoomBP.style("background-color", panelColor);
-  zoomBP.position(width*0.4, height*0.91);
-  zoomBP.size(width*0.57, hPanel);
-
-  tooltipTB.style("font-family", "Courier");
+  tooltipTB.style("font-family", "Consolas");
   tooltipTB.style("font-size", textMid + "px");
   tooltipTB.style("white-space", "pre-wrap");
-  tooltipTB.style("background-color", "#444");
+  tooltipTB.style("background-color", "#222");
   tooltipTB.style("overflow-y", "auto")
   tooltipTB.style("color", "white");
   tooltipTB.style("padding", "4px");
   tooltipTB.position(xTooltip, yTooltip);
   tooltipTB.size(wTooltip-8, hTooltip*0.8-8);
+  tooltipTB.style("border-radius", "4px 4px 0 0");
 
-  linkTB.style("font-family", "Courier");
+  linkTB.style("font-family", "Consolas");
   linkTB.style("font-size", textMid + "px");
   linkTB.style("white-space", "pre-wrap");
-  linkTB.style("background-color", "#666");
+  linkTB.style("background-color", "#333");
   linkTB.style("overflow-y", "auto")
   linkTB.style("color", "#ccf")
   linkTB.style("padding-left", "4px")
   linkTB.position(xTooltip, yTooltip+hTooltip*0.8);
   linkTB.size(wTooltip-4, hTooltip*0.2);
+  linkTB.style("border-radius", "0 0 4px 4px");
 
+/*
   zoomBP.style("background-color", panelColor);
   zoomBP.position(width*0.4, height*0.90);
   zoomBP.size(width*0.57, hPanel);
+*/
 
 /*
   redBP.style("background-color", panelColor);
@@ -196,7 +198,7 @@ function UI() {
   zoomTB2.style("text-align", "center");
   zoomTB2.position(width*0.79, height*0.92);
   zoomTB2.size(width*0.09, hButton);
-  zoomTB2.html("Zoom amplitud");
+  zoomTB2.html("Zoom amp");
 
   //titleTB0.style("font-family", "Courier");
   titleTB0.style("font-size", textBig + "px");
@@ -218,6 +220,13 @@ function UI() {
   titleTB2.position(width*0.7, height*0.05);
   titleTB2.size(width*0.27, height*0.03);
   titleTB2.html("Mayores amplitudes");
+
+  if (height * 1.2 > width) {
+    titleTB1.html("Seleccionadas");
+    titleTB2.html("Mayores");
+    zoomTB1.html("Tiempo");
+    zoomTB2.html("Amp");
+  }
 }
 
 function setup() {
@@ -352,6 +361,7 @@ function setup() {
     button.style('display', 'inline-block');
     button.style('width', width*0.07 + 'px');
     button.style('height', height*0.05 + 'px');
+    button.style('border-radius', '4px');
     button.mouseOver(function() {
       tooltipTB.html(buttonFirstTooltip[this.elt.value]);
 
@@ -375,6 +385,7 @@ function setup() {
     button.style('display', 'inline-block');
     button.style('width', width*0.055 + 'px');
     button.style('height', height*0.05 + 'px');
+    button.style('border-radius', '4px');
     button.mouseOver(function() {
       tooltipTB.html(buttonSecondTooltip[this.elt.value]);
 
@@ -399,6 +410,7 @@ function setup() {
     button.style('display', 'inline-block');
     button.style('width', width*0.06 + 'px');
     button.style('height', hButton + 'px');
+    button.style('border-radius', '4px');
     button.mouseOver(function() {
       tooltipTB.html(buttonThirdTooltip[this.elt.value]);
 
@@ -423,6 +435,7 @@ function setup() {
     button.style('display', 'inline-block');
     button.style('width', width*0.11 + 'px');
     button.style('height', hButton + 'px');
+    button.style('border-radius', '4px');
     button.mouseOver(function() {
       tooltipTB.html(buttonFourthTooltip[this.elt.value]);
 
@@ -723,7 +736,7 @@ function printRealCommon () {
 }
 
 function drawGraphTop () {
-  graphTop.background(180,180,200);
+  graphTop.background(180,200,200);
 
   if (millis() - 200 > lastTime) {
     // calcular promedios, limpiar
@@ -754,7 +767,7 @@ function drawGraphTop () {
               topten[i].frequency,
               topten[i].magnitude * 10,
               topten[i].runningphase * 57.2958,
-              'blue',
+              'cyan',
               margin,
               i*sinSpacer+margin,
               width*0.27-negMargin,
@@ -797,7 +810,7 @@ function drawGraphTop () {
               topten[3].frequency,
               topten[3].magnitude * 10,
               topten[3].runningphase * 57.2958,
-              'blue',
+              'cyan',
               margin,
               3*sinSpacer+margin,
               width*0.27-negMargin,
